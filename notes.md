@@ -38,3 +38,14 @@ Public function __toString() {
 ```
 
 **fetch="EAGER"** => pour récupérer systématiquement l'objet de la relation
+
+### Si une classe de Repository est manquante
+
+On serait bloqués pour :
+- "injecter" MovieRepository dans une méthode de contrôleur.
+- Créer des requêtes custom.
+
+Solution :
+- On indique la classe de Repository au niveau du @ORM\Entity, par exemple `@ORM\Entity(repositoryClass=MovieRepository::class)` + un `use App\Repository\MovieRepository;`
+- Puis on exécute la commande `make:entity --regenerate`
+- FQCN complet à saisir par exemple : `App\Entity\Movie`

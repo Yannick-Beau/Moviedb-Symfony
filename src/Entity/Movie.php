@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 // On va appliquer la logique de mapping via l'annotation @ORM
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Classe qui représente la table "movie" et ses enregistrements
  * 
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=MovieRepository::class)
  */
 class Movie {
     /**
