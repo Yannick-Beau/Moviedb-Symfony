@@ -12,6 +12,9 @@
 - ``` php bin/console doctrine:migrations:migrate ``` => **éxécuter la migration sur la BDD**
 - ``` php bin/console make:controller nomDuController``` => **créer un controller**
 - ``` php bin/console doctrine:schema:update --dump-sql ``` => **Vérifier la structure SQL**
+- ``` php bin/console doctrine:schema:validate ``` => **voir si le mapping est corect avec la BDD**
+- ``` php bin/console make:controller ``` => **Créer un controller**
+- ``` php bin/console make:entity ``` => **Créer une entité ou modfier une enitté existente**
 
 ## Relations
 
@@ -47,5 +50,6 @@ On serait bloqués pour :
 
 Solution :
 - On indique la classe de Repository au niveau du @ORM\Entity, par exemple `@ORM\Entity(repositoryClass=MovieRepository::class)` + un `use App\Repository\MovieRepository;`
+- ou directement `@ORM\Entity(repositoryClass='App\Repository\MovieRepository')`
 - Puis on exécute la commande `make:entity --regenerate`
 - FQCN complet à saisir par exemple : `App\Entity\Movie`
