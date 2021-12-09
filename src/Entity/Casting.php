@@ -33,6 +33,12 @@ class Casting
      */
     private $movieId;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="castings")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $person;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +76,18 @@ class Casting
     public function setMovieId(?Movie $movieId): self
     {
         $this->movieId = $movieId;
+
+        return $this;
+    }
+
+    public function getPerson(): ?Person
+    {
+        return $this->person;
+    }
+
+    public function setPerson(?Person $person): self
+    {
+        $this->person = $person;
 
         return $this;
     }
