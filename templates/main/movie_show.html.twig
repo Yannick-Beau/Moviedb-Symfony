@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	{{ movie.title }}
+{% endblock %}
+
+
+{% block body %}
+
+<h2>{{ movie.title}}</h2>
+<p>
+    {{ movie.releaseDate|date('d-M-Y')}}
+    |
+    {{ movie.duration }}
+	|
+	{% for genre in movie.genres %}
+		{{ genre.name }}{{ loop.last ? '.' : ', '}}
+
+	{% endfor %}
+</p>
+    {% for casting in movie.castings %}
+        {{ casting.person.firstname }}
+        {{ casting.person.lastname }}
+        ({{ casting.role }}){{ loop.last ? '' : ', '}}
+    {% endfor %}
+<p>
+    
+</p>
+
+{% endblock %}

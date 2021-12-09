@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bienvenue sur HelloCiné !{% endblock %}
+{% block title %}Bienvenue !{% endblock %}
 
 {% block body %}
 <h2>Liste des films</h2>
 <ul>
 {% for movie in movies %}
-    <li><a href="">{{ movie.title }}</a></li>
+    <li><a href="{{ path('movie_show', {id: movie.id}) }}">{{ movie.title }}</a></li>
 {% endfor %}
 </ul>
 {% endblock %}
