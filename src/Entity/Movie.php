@@ -39,6 +39,16 @@ class Movie {
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $releaseDate;
+
+    /**
+     * @ORM\Column(type="string", length=8)
+     */
+    private $duration;
     
    
     /**
@@ -117,6 +127,30 @@ class Movie {
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getReleaseDate(): ?\DateTimeInterface
+    {
+        return $this->releaseDate;
+    }
+
+    public function setReleaseDate(\DateTimeInterface $releaseDate): self
+    {
+        $this->releaseDate = $releaseDate;
+
+        return $this;
+    }
+
+    public function getDuration(): ?string
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(string $duration): self
+    {
+        $this->duration = $duration;
 
         return $this;
     }
