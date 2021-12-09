@@ -57,9 +57,15 @@ class Movie {
      */
     private $genres;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Casting::class, mappedBy="movieId", orphanRemoval=true)
+     */
+    private $castings;
+
     public function __construct()
     {
         $this->genres = new ArrayCollection();
+        $this->castings = new ArrayCollection();
     }
     
    
@@ -187,6 +193,36 @@ class Movie {
     public function removeGenre(Genre $genre): self
     {
         $this->genres->removeElement($genre);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Casting[]
+     */
+    public function getCastings(): Collection
+    {
+        return $this->castings;
+    }
+
+    public function addCasting(Casting $casting): self
+    {
+        if (!$this->castings->contains($casting)) {
+            $this->castings[] = $casting;
+            $casting->setMovieId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCasting(Casting $casting): self
+    {
+        if ($this->castings->removeElement($casting)) {
+            // set the owning side to null (unless already changed)
+            if ($casting->getMovieId() === $this) {
+                $casting->setMovieId(null);
+            }
+        }
 
         return $this;
     }
