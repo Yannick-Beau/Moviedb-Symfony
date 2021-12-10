@@ -31,7 +31,7 @@ class Casting
      * @ORM\ManyToOne(targetEntity=Movie::class, inversedBy="castings")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $movieId;
+    private $movie;
 
     /**
      * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="castings")
