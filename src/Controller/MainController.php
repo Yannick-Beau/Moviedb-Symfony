@@ -33,7 +33,7 @@ class MainController extends AbstractController
            throw $this->createNotFoundException('Film non trouvé.');
        }
 
-       $castings = $castingRepository->findAllByMovieJoinedToPerson($movie->getId());
+       $castings = $castingRepository->findAllByMovieJoinedToPerson($movie);
        
 
         return $this->render('main/movie_show.html.twig', [
