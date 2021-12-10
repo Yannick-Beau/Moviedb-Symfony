@@ -18,7 +18,7 @@
 
 	{% endfor %}
 </p>
-    {% for casting in movie.castings %}
+    {% for casting in castings %}
         {{ casting.person.firstname }}
         {{ casting.person.lastname }}
         ({{ casting.role }}){{ loop.last ? '' : ', '}}

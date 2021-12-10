@@ -19,6 +19,25 @@ class CastingRepository extends ServiceEntityRepository
         parent::__construct($registry, Casting::class);
     }
 
+    /**
+     * Tous les castings d'un film donné
+     * joins sur l'entité Person
+     */
+    public function findAllByMovieJoinedToPerson(int $movieId)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT c, p
+            FROM App\Entity\Casting c
+            INNER JOIN c.person p
+            WHERE c.movieId = :id
+            ORDER BY c.creditOrder'
+        )->setParameter('id', $movieId);
+
+        return $query->getResult();
+    }
+
     // /**
     //  * @return Casting[] Returns an array of Casting objects
     //  */
