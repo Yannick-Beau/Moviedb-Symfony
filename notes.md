@@ -16,6 +16,9 @@
 - ``` php bin/console make:controller ``` => **Créer un controller**
 - ``` php bin/console make:entity ``` => **Créer une entité ou modfier une enitté existente**
 
+### DataFixtures
+- ` php bin/console doctrine:fixtures:load ` => **Exécute les data fixtures pour remplir la BDD de données de test**
+
 ## Relations
 
 ### ManyToOne (1N)
