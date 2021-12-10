@@ -78,14 +78,14 @@ class Casting
         return $this;
     }
 
-    public function getMovieId(): ?Movie
+    public function getMovie(): ?Movie
     {
-        return $this->movieId;
+        return $this->movie;
     }
 
-    public function setMovieId(?Movie $movieId): self
+    public function setMovie(?Movie $movie): self
     {
-        $this->movieId = $movieId;
+        $this->movie = $movie;
 
         return $this;
     }

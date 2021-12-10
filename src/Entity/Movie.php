@@ -210,7 +210,7 @@ class Movie {
     {
         if (!$this->castings->contains($casting)) {
             $this->castings[] = $casting;
-            $casting->setMovieId($this);
+            $casting->setMovie($this);
         }
 
         return $this;
@@ -220,8 +220,8 @@ class Movie {
     {
         if ($this->castings->removeElement($casting)) {
             // set the owning side to null (unless already changed)
-            if ($casting->getMovieId() === $this) {
-                $casting->setMovieId(null);
+            if ($casting->getMovie() === $this) {
+                $casting->setMovie(null);
             }
         }
 

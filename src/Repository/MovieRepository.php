@@ -38,25 +38,8 @@ class MovieRepository extends ServiceEntityRepository
     //         ->getResult();
     // }
 
+
     
-
-    // /**
-    //  * @return Movie[] Returns an array of Movie objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
     /*
     public function findOneBySomeField($value): ?Movie
     {

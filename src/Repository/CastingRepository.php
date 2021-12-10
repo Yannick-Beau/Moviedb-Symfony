@@ -24,7 +24,7 @@ class CastingRepository extends ServiceEntityRepository
      * Tous les castings d'un film donné
      * joins sur l'entité Person
      */
-    public function findAllByMovieJoinedToPerson(Movie $movie)
+    public function findAllByMovieJoinedToPerson($movie)
     {
         $entityManager = $this->getEntityManager();
 
@@ -32,7 +32,7 @@ class CastingRepository extends ServiceEntityRepository
             'SELECT c, p
             FROM App\Entity\Casting c
             INNER JOIN c.person p
-            WHERE c.movieId = :movie
+            WHERE c.movie = :movie
             ORDER BY c.creditOrder'
         )->setParameter('movie', $movie);
 
