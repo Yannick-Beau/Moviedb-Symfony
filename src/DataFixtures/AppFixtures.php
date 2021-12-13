@@ -20,9 +20,12 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // Fournisseur de données
-        $movieDbProvider = new MovieDbProvider();
         $faker = Faker\Factory::create();
+
+        // Si on veut toujours les mêmes données
+        $faker->seed('MovieDB');
+        // Fournisseur de données, ajouté à Faker
+        $faker->addProvider(new MovieDbProvider);
 
         $genres = [];
         $persons = [];
@@ -30,7 +33,7 @@ class AppFixtures extends Fixture
 
         for ($i = 1; $i <= 20; $i++) {
             $genre = new Genre();
-            $genre->setName($movieDbProvider->movieGenre());
+            $genre->setName($faker->unique()->movieGenre());
             $genre->setCreatedAt(new DateTimeImmutable());
 
             $genres[] = $genre;
@@ -49,7 +52,7 @@ class AppFixtures extends Fixture
 
         for ($i = 1; $i <= 20; $i++) {
             $movie = new Movie();
-            $movie->setTitle($movieDbProvider->movieTitle());
+            $movie->setTitle($faker->unique()->movieTitle());
             $movie->setReleaseDate(new DateTime());
             $movie->setDuration('1h ' . $i . 'min');
             $movie->setCreatedAt(new DateTime());
