@@ -56,3 +56,8 @@ Solution :
 - ou directement `@ORM\Entity(repositoryClass='App\Repository\MovieRepository')`
 - Puis on exécute la commande `make:entity --regenerate`
 - FQCN complet à saisir par exemple : `App\Entity\Movie`
+
+### Faker librairie de fausse données
+
+installation :
+` composer require fakerphp/faker `

@@ -2,29 +2,35 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Casting;
+use DateTime;
+use Faker;
 use App\Entity\Genre;
 use App\Entity\Movie;
 use App\Entity\Person;
-use DateTime;
 use DateTimeImmutable;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\DBAL\Types\DateImmutableType;
+use App\Entity\Casting;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\DBAL\Types\DateImmutableType;
 use SebastianBergmann\Environment\Console;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\DataFixtures\provider\MovieDbProvider;
 use Symfony\Component\Validator\Constraints\DateTime as ConstraintsDateTime;
 
 class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        // Fournisseur de données
+        $movieDbProvider = new MovieDbProvider();
+        $faker = Faker\Factory::create();
+
         $genres = [];
         $persons = [];
         $movies = [];
 
         for ($i = 1; $i <= 20; $i++) {
             $genre = new Genre();
-            $genre->setName('Genre #' . $i);
+            $genre->setName($movieDbProvider->movieGenre());
             $genre->setCreatedAt(new DateTimeImmutable());
 
             $genres[] = $genre;
@@ -33,8 +39,8 @@ class AppFixtures extends Fixture
 
         for ($i = 1; $i <= 20; $i++) {
             $person = new Person();
-            $person->setFirstname('Firstname #' . $i);
-            $person->setLastname('Lastname #' . $i);
+            $person->setFirstname($faker->firstName());
+            $person->setLastname($faker->lastName());
             $person->setCreatedAt(new DateTimeImmutable());
 
             $persons[] = $person;
@@ -43,7 +49,7 @@ class AppFixtures extends Fixture
 
         for ($i = 1; $i <= 20; $i++) {
             $movie = new Movie();
-            $movie->setTitle('Film #' . $i);
+            $movie->setTitle($movieDbProvider->movieTitle());
             $movie->setReleaseDate(new DateTime());
             $movie->setDuration('1h ' . $i . 'min');
             $movie->setCreatedAt(new DateTime());
@@ -69,7 +75,7 @@ class AppFixtures extends Fixture
         foreach ($movies as $movie) {
             for ($i = 1; $i <= mt_rand(2, 4); $i++) {
                 $casting = new Casting();
-                $casting->setRole('Role #' . $i);
+                $casting->setRole($faker->firstName());
                 $casting->setCreditOrder($i);
                 $casting->setCreatedAt(new DateTimeImmutable());
                 $casting->setMovie($movie);
