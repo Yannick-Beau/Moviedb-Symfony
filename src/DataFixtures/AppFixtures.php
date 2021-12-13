@@ -48,27 +48,32 @@ class AppFixtures extends Fixture
             $movie->setDuration('1h ' . $i . 'min');
             $movie->setCreatedAt(new DateTime());
 
+            // Association de 1 à 3 genres au hasard
+            for($r = 1; $r <= mt_rand(1, 3); $r++) {
+                // On va chercher un genre aléatoirement dans la liste des genres
+                $movie->addGenre($genres[array_rand($genres)]);
+            }
+
             $movies[] = $movie;
             $manager->persist($movie);
         }
-        for ($i = 1; $i <= 20; $i++) {
-            $movie = $movies[$i -1];
-            $randNumber = rand(0, 19);
-            $movie->addGenre($genres[$randNumber]);
+
+        // for ($i = 1; $i <= 20; $i++) {
+        //     $movie = $movies[$i -1];
+        //     $randNumber = rand(0, 19);
+        //     $movie->addGenre($genres[$randNumber]);
             
-            $manager->persist($movie);
-        }
+        //     $manager->persist($movie);
+        // }
 
         foreach ($movies as $movie) {
-            for ($i = 1; $i <= 3; $i++) {
-                $randNumber = rand(0, 19);
-
+            for ($i = 1; $i <= mt_rand(2, 4); $i++) {
                 $casting = new Casting();
                 $casting->setRole('Role #' . $i);
                 $casting->setCreditOrder($i);
                 $casting->setCreatedAt(new DateTimeImmutable());
                 $casting->setMovie($movie);
-                $casting->setPerson($persons[$randNumber]);
+                $casting->setPerson($persons[array_rand($persons)]);
 
                 $manager->persist($casting);
             }
