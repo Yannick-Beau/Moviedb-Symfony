@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Movie;
+use App\Entity\Review;
+use App\Form\ReviewType;
+use Doctrine\ORM\EntityManager;
 use App\Repository\MovieRepository;
 use App\Repository\CastingRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,8 +55,15 @@ class MainController extends AbstractController
            throw $this->createNotFoundException('Film non trouvé.');
        }
 
+       // Nouvelle critique
+       $review = new Review();
+
+       // Créarion du form, associé à l'entité $review
+       $form = $this->createForm(ReviewType::class, $review);
+
         return $this->render('main/movie_add_review.html.twig', [
-            
+            'form' => $form->createView(),
+            'movie' => $movie,
         ]);
     }
 
