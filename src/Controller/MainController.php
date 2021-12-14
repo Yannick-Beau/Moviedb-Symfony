@@ -43,5 +43,20 @@ class MainController extends AbstractController
         ]);
     }
 
+    /**
+     * Ajout d'une critique sur un film
+     */
+    #[Route('/movie/{id<\d+>}/add/review', name: 'movie_add_review')]
+    public function movieAddReview(Movie $movie = null): Response
+    {
+       if ($movie === null) {
+           throw $this->createNotFoundException('Film non trouvé.');
+       }
+
+        return $this->render('main/movie_add_review.html.twig', [
+            
+        ]);
+    }
+
 
 }

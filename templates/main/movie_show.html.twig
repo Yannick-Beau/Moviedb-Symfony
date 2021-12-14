@@ -18,13 +18,15 @@
 
 	{% endfor %}
 </p>
-    {% for casting in castings %}
-        {{ casting.person.firstname }}
-        {{ casting.person.lastname }}
-        ({{ casting.role }}){{ loop.last ? '' : ', '}}
-    {% endfor %}
+<h3>Acteurs</h3>
 <p>
-    
+{% for casting in castings %}
+	{{ casting.person.firstname }}
+	{{ casting.person.lastname }}
+	({{ casting.role }}){{ loop.last ? '' : ', '}}
+{% endfor %}
 </p>
 
+<h3>Critiques</h3>
+<a class="btn btn-primary" href="{{ path('movie_add_review', {id: movie.id}) }}">Ajouter une critique</a>
 {% endblock %}
