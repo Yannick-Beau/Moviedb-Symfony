@@ -69,6 +69,7 @@ class MainController extends AbstractController
            $review->setMovie($movie);
            $entityManager->persist($review);
            $entityManager->flush();
+           return $this->redirectToRoute('movie_show', ['id' => $movie->getId()]);
        }
 
         return $this->render('main/movie_add_review.html.twig', [

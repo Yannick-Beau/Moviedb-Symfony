@@ -29,4 +29,20 @@
 
 <h3>Critiques</h3>
 <a class="btn btn-primary" href="{{ path('movie_add_review', {id: movie.id}) }}">Ajouter une critique</a>
+
+{% for review in movie.reviews %}
+	<div class="card mx-1 mb-3 w-75">
+		<div class="card-body">
+			<h4 class="car-title">{{review.username}}</h4>
+			<h5 class="card-subtitle mb-2 text-muted">Note : {{review.rating}} sur 5</h5>
+			<h5 class="card-subtitle mb-2 text-muted">Vu le : {{(review.watchedAt|date('d/m/Y'))}}</h5>
+			<p class="card-text">{{review.content}}</p>
+			<div class="my-2">
+				{% for reaction in review.reactions %}
+					<span>{{reaction}}</span>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endfor %}
 {% endblock %}
