@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Entity\Review;
+use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MovieRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 // On va appliquer la logique de mapping via l'annotation @ORM
 // qui correspond à un dossier "Mapping" de Doctrine
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Classe qui représente la table "movie" et ses enregistrements
@@ -63,10 +64,17 @@ class Movie {
      */
     private $castings;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Review::class, mappedBy="movie", orphanRemoval=true)
+     */
+    private $reviews;
+
+
     public function __construct()
     {
         $this->genres = new ArrayCollection();
         $this->castings = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
     
    
@@ -227,4 +235,36 @@ class Movie {
 
         return $this;
     }
+
+    /**
+     * @return Collection|Review[]
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->setMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getMovie() === $this) {
+                $review->setMovie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
 }
