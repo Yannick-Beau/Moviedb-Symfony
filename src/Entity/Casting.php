@@ -49,6 +49,8 @@ class Casting
      */
     private $updatedAt;
 
+    
+
     public function getId(): ?int
     {
         return $this->id;

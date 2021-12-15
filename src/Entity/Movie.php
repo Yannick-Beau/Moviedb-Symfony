@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Review;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MovieRepository;
+use DateTime;
 // On va appliquer la logique de mapping via l'annotation @ORM
 // qui correspond à un dossier "Mapping" de Doctrine
 use Doctrine\Common\Collections\Collection;
@@ -87,6 +88,7 @@ class Movie {
 
     public function __construct()
     {
+        $this->createdAt = new DateTime();
         $this->genres = new ArrayCollection();
         $this->castings = new ArrayCollection();
         $this->reviews = new ArrayCollection();
