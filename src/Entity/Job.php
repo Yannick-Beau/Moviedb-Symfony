@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\PersonRepository;
+use App\Repository\JobRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=PersonRepository::class)
+ * @ORM\Entity(repositoryClass=JobRepository::class)
  */
-class Person
+class Job
 {
     /**
      * @ORM\Id
@@ -20,19 +20,9 @@ class Person
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50)
      */
-    private $firstname;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $lastname;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Casting::class, mappedBy="person")
-     */
-    private $castings;
+    private $name;
 
     /**
      * @ORM\Column(type="datetime_immutable")
@@ -45,13 +35,18 @@ class Person
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Team::class, mappedBy="person", orphanRemoval=true)
+     * @ORM\ManyToOne(targetEntity=Departement::class, inversedBy="jobs")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $departement;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Team::class, mappedBy="job", orphanRemoval=true)
      */
     private $teams;
 
     public function __construct()
     {
-        $this->castings = new ArrayCollection();
         $this->teams = new ArrayCollection();
     }
 
@@ -60,56 +55,14 @@ class Person
         return $this->id;
     }
 
-    public function getFirstname(): ?string
+    public function getName(): ?string
     {
-        return $this->firstname;
+        return $this->name;
     }
 
-    public function setFirstname(string $firstname): self
+    public function setName(string $name): self
     {
-        $this->firstname = $firstname;
-
-        return $this;
-    }
-
-    public function getLastname(): ?string
-    {
-        return $this->lastname;
-    }
-
-    public function setLastname(string $lastname): self
-    {
-        $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Casting[]
-     */
-    public function getCastings(): Collection
-    {
-        return $this->castings;
-    }
-
-    public function addCasting(Casting $casting): self
-    {
-        if (!$this->castings->contains($casting)) {
-            $this->castings[] = $casting;
-            $casting->setPerson($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCasting(Casting $casting): self
-    {
-        if ($this->castings->removeElement($casting)) {
-            // set the owning side to null (unless already changed)
-            if ($casting->getPerson() === $this) {
-                $casting->setPerson(null);
-            }
-        }
+        $this->name = $name;
 
         return $this;
     }
@@ -138,6 +91,18 @@ class Person
         return $this;
     }
 
+    public function getDepartement(): ?Departement
+    {
+        return $this->departement;
+    }
+
+    public function setDepartement(?Departement $departement): self
+    {
+        $this->departement = $departement;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Team[]
      */
@@ -150,7 +115,7 @@ class Person
     {
         if (!$this->teams->contains($team)) {
             $this->teams[] = $team;
-            $team->setPerson($this);
+            $team->setJob($this);
         }
 
         return $this;
@@ -160,8 +125,8 @@ class Person
     {
         if ($this->teams->removeElement($team)) {
             // set the owning side to null (unless already changed)
-            if ($team->getPerson() === $this) {
-                $team->setPerson(null);
+            if ($team->getJob() === $this) {
+                $team->setJob(null);
             }
         }
 

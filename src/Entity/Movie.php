@@ -45,12 +45,12 @@ class Movie {
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="date", nullable=false)
      */
     private $releaseDate;
 
     /**
-     * @ORM\Column(type="string", length=8)
+     * @ORM\Column(type="smallint", nullable=false)
      */
     private $duration;
 
@@ -60,7 +60,7 @@ class Movie {
     private $genres;
 
     /**
-     * @ORM\OneToMany(targetEntity=Casting::class, mappedBy="movieId", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Casting::class, mappedBy="movie", orphanRemoval=true)
      */
     private $castings;
 
@@ -69,12 +69,28 @@ class Movie {
      */
     private $reviews;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $poster;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $rating;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Team::class, mappedBy="movie", orphanRemoval=true)
+     */
+    private $teams;
+
 
     public function __construct()
     {
         $this->genres = new ArrayCollection();
         $this->castings = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->teams = new ArrayCollection();
     }
     
    
@@ -260,6 +276,60 @@ class Movie {
             // set the owning side to null (unless already changed)
             if ($review->getMovie() === $this) {
                 $review->setMovie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPoster(): ?string
+    {
+        return $this->poster;
+    }
+
+    public function setPoster(?string $poster): self
+    {
+        $this->poster = $poster;
+
+        return $this;
+    }
+
+    public function getRating(): ?int
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?int $rating): self
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Team[]
+     */
+    public function getTeams(): Collection
+    {
+        return $this->teams;
+    }
+
+    public function addTeam(Team $team): self
+    {
+        if (!$this->teams->contains($team)) {
+            $this->teams[] = $team;
+            $team->setMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): self
+    {
+        if ($this->teams->removeElement($team)) {
+            // set the owning side to null (unless already changed)
+            if ($team->getMovie() === $this) {
+                $team->setMovie(null);
             }
         }
 
