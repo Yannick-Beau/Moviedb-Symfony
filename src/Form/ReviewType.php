@@ -4,13 +4,15 @@ namespace App\Form;
 
 use App\Entity\Review;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ReviewType extends AbstractType
 {
@@ -55,10 +57,10 @@ class ReviewType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
             ])
-            ->add('watchedAt', null, [
-                'label' => 'Vous avez vu ce film le'
-            ])
-        ;
+            ->add('watchedAt', DateTimeType::class, [
+                'label' => 'Vous avez vu ce film le',
+                'input' => 'datetime_immutable'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

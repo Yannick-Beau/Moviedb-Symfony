@@ -5,9 +5,10 @@ namespace App\Controller;
 use App\Entity\Movie;
 use App\Entity\Review;
 use App\Form\ReviewType;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\MovieRepository;
 use App\Repository\CastingRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,8 +49,8 @@ class MainController extends AbstractController
     /**
      * Ajout d'une critique sur un film
      */
-    #[Route('/movie/{id<\d+>}/add/review', name: 'movie_add_review')]
-    public function movieAddReview(Movie $movie = null): Response
+    #[Route('/movie/{id<\d+>}/add/review', name: 'movie_add_review', methods: ['GET', 'POST'])]
+    public function movieAddReview(Movie $movie = null, Request $request, EntityManagerInterface $entityManager): Response
     {
        if ($movie === null) {
            throw $this->createNotFoundException('Film non trouvé.');
@@ -60,6 +61,15 @@ class MainController extends AbstractController
 
        // Créarion du form, associé à l'entité $review
        $form = $this->createForm(ReviewType::class, $review);
+
+       // Prendre en charge la requête
+       $form->handleRequest($request);
+
+       if ($form->isSubmitted() && $form->isValid()) {
+           $review->setMovie($movie);
+           $entityManager->persist($review);
+           $entityManager->flush();
+       }
 
         return $this->render('main/movie_add_review.html.twig', [
             'form' => $form->createView(),
