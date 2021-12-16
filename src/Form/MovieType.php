@@ -7,6 +7,7 @@ use App\Entity\Movie;
 use App\Repository\GenreRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,7 +19,7 @@ class MovieType extends AbstractType
             ->add('title')
             ->add('releaseDate')
             ->add('duration')
-            ->add('poster')
+            ->add('poster', UrlType::class)
             ->add('genres', EntityType::class, [
                 'class' => Genre::class,
                 // On a plusieurs choix possbiles (ArrayCollection)

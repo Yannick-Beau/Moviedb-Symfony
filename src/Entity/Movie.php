@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
+use DateTime;
 use App\Entity\Review;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MovieRepository;
-use DateTime;
 // On va appliquer la logique de mapping via l'annotation @ORM
 // qui correspond à un dossier "Mapping" de Doctrine
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Classe qui représente la table "movie" et ses enregistrements
@@ -32,6 +34,9 @@ class Movie {
      * Titre du film
      * 
      * @ORM\Column(type="string", length=211)
+     * 
+     * @Assert\NotBlank
+     * @Assert\Length(max = 211)
      */
     private $title;
 
@@ -47,16 +52,24 @@ class Movie {
 
     /**
      * @ORM\Column(type="date", nullable=false)
+     * 
+     * @Assert\NotBlank
      */
     private $releaseDate;
 
     /**
      * @ORM\Column(type="smallint", nullable=false)
+     * 
+     * @Assert\NotBlank
+     * @Assert\Positive
+     * @Assert\LessThanOrEqual(1440)
      */
     private $duration;
 
     /**
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="movies")
+     * 
+     * @Assert\Count(min=1)
      */
     private $genres;
 
