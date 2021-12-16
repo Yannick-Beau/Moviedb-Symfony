@@ -1,7 +1,49 @@
-{% extends 'base.html.twig' %}
+{% extends "back/base_back.html.twig" %}
 
-{% block title %}Admin{% endblock %}
+{% block title %}liste des film - Admin{% endblock %}
 
 {% block body %}
-    <h1>Admin - liste des films</h1>
+<div class="my-5 d-flex justify-content-between align-items-center">
+	<h2>Movie List</h2>
+
+    <a href="{{ path('back_movie_add') }}" class="btn btn-success" role="button">Add New Movie</a>
+</div>
+
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Poster</th>
+			<th>Title</th>
+			<th>Duration</th>
+			<th>Release Date</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for movie in movies %}
+			<tr>
+				<td>{{ movie.id }}</td>
+				<td><img src="{{ movie.poster ?? asset('default-movie.jpg') }}" alt="{{ movie.title }}" width="100" height="130" class="img-fluid"/></td>
+				<td>{{ movie.title }}</td>
+				<td>{{ movie.duration }}
+					min.</td>
+				<td>{{ movie.releaseDate | date('M-Y') }}</td>
+				<td>
+					<a href="{{ path('back_movie_read', {id: movie.id}) }}">
+						<i class="far fa-eye text-info fa-2x"></i>
+					</a>
+
+						<a href="">
+							<i class="far fa-edit text-warning fa-2x"></i>
+						</i>
+					</a>
+					<a href="">
+						<i class="far fa-trash-alt text-danger fa-2x"></i>
+					</a>
+		    </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

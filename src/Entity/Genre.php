@@ -44,6 +44,14 @@ class Genre
         $this->movies = new ArrayCollection();
     }
 
+    /**
+     * Si besoin d'afficher un objet $genre
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
