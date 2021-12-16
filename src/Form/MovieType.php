@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Genre;
 use App\Entity\Movie;
+use App\Repository\GenreRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,6 +27,13 @@ class MovieType extends AbstractType
                 'expanded' => true,
                 // libellé de l'option
                 'choice_label' => 'name',
+                // Cette option permet d'écrire une requête custom en lui transmettant le Repository
+                // de l'ntité concernée et en retournant un objet QueryBuilder construit pour notre besoin
+                // ici : SELECT * FROM genre ORDER BY ASC
+                'query_builder' => function (GenreRepository $genre) {
+                    return $genre->createQueryBuilder('g')
+                        ->orderBy('g.name', 'ASC');
+                },
             ])
         ;
     }
