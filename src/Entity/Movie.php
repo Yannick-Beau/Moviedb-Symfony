@@ -102,6 +102,7 @@ class Movie {
     public function __construct()
     {
         $this->createdAt = new DateTime();
+        $this->releaseDate = new DateTime();
         $this->genres = new ArrayCollection();
         $this->castings = new ArrayCollection();
         $this->reviews = new ArrayCollection();
