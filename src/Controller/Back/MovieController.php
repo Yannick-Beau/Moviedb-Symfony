@@ -72,7 +72,7 @@ class MovieController extends AbstractController
      * Editer un film
      */
     #[Route('/back/movie/edit/{id<\d+>}', name: 'back_movie_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager, Movie $movie): Response
+    public function edit(Request $request, EntityManagerInterface $entityManager, Movie $movie = null): Response
     {   
         // 404
         if ($movie === null) {
@@ -94,5 +94,23 @@ class MovieController extends AbstractController
         return $this->render('back/movie/add.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+     /**
+     * Supprimer un film
+     */
+    #[Route('/back/movie/delete/{id<\d+>}', name: 'back_movie_delete', methods: ['GET', 'POST'])]
+    public function delete(EntityManagerInterface $entityManager, Movie $movie = null): Response
+    {   
+        // 404
+        if ($movie === null) {
+            throw $this->createNotFoundException('Film non trouvé.');
+        }
+       $entityManager->remove($movie);
+       $entityManager->flush();
+       return $this->redirectToRoute('back_movie_browse');
+       
+
+        
     }
 }
