@@ -32,6 +32,7 @@ class MovieController extends AbstractController
     #[Route('/back/movie/read/{id<\d+>}', name: 'back_movie_read', methods: ['GET'])]
     public function read(Movie $movie = null, CastingRepository $castingRepository): Response
     {
+        // 404
         if ($movie === null) {
             throw $this->createNotFoundException('Film non trouvé.');
         }
@@ -58,6 +59,34 @@ class MovieController extends AbstractController
        if ($form->isSubmitted() && $form->isValid()) {
 
            $entityManager->persist($movie);
+           $entityManager->flush();
+           return $this->redirectToRoute('back_movie_read', ['id' => $movie->getId()]);
+       }
+
+        return $this->render('back/movie/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Editer un film
+     */
+    #[Route('/back/movie/edit/{id<\d+>}', name: 'back_movie_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, EntityManagerInterface $entityManager, Movie $movie): Response
+    {   
+        // 404
+        if ($movie === null) {
+            throw $this->createNotFoundException('Film non trouvé.');
+        }
+        // Créarion du form, associé à l'entité $review
+       $form = $this->createForm(MovieType::class, $movie);
+
+       // Prendre en charge la requête
+       $form->handleRequest($request);
+
+       if ($form->isSubmitted() && $form->isValid()) {
+
+           // Pas de persit() pour un edit
            $entityManager->flush();
            return $this->redirectToRoute('back_movie_read', ['id' => $movie->getId()]);
        }

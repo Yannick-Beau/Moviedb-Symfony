@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Genre;
 use App\Entity\Movie;
 use App\Repository\GenreRepository;
+use DateTime;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -17,7 +18,10 @@ class MovieType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('releaseDate')
+            ->add('releaseDate', null, [
+                'years' => range( date('Y') - 100, date('Y') + 10 ),
+                // 'data' => new DateTime(),
+            ])
             ->add('duration')
             ->add('poster', UrlType::class)
             ->add('genres', EntityType::class, [
