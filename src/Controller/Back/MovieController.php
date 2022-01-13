@@ -99,7 +99,7 @@ class MovieController extends AbstractController
      /**
      * Supprimer un film
      */
-    #[Route('/back/movie/delete/{id<\d+>}', name: 'back_movie_delete', methods: ['GET', 'POST'])]
+    #[Route('/back/movie/delete/{id<\d+>}', name: 'back_movie_delete', methods: ['GET'])]
     public function delete(EntityManagerInterface $entityManager, Movie $movie = null): Response
     {   
         // 404
