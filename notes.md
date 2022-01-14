@@ -16,6 +16,7 @@
 - ``` php bin/console make:controller ``` => **Créer un controller**
 - ``` php bin/console make:entity ``` => **Créer une entité ou modfier une enitté existente**
 - ` php bin/console make:form ` => **Créer une classe form**
+- ` php bin/console security:hash-password ` => **Hasher un password**
 
 ### DataFixtures
 - ` php bin/console doctrine:fixtures:load ` => **Exécute les data fixtures pour remplir la BDD de données de test**

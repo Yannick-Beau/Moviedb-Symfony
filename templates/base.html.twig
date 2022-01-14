@@ -13,6 +13,16 @@
     <body>
         <header class="container">
             <h1>HelloCiné</h1>
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('home') }}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('back_movie_browse') }}">Admin</a>
+                </li>
+            </ul>
+            {% block subnav %}
+            {% endblock %}
         </header>
         <main class="container">
             <div class="row">
