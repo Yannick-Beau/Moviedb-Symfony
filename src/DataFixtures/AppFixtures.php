@@ -14,11 +14,12 @@ use Doctrine\DBAL\Types\DateImmutableType;
 use SebastianBergmann\Environment\Console;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use App\DataFixtures\provider\MovieDbProvider;
+use App\Entity\User;
 use Symfony\Component\Validator\Constraints\DateTime as ConstraintsDateTime;
 
 class AppFixtures extends Fixture
 {
-    public function load(ObjectManager $manager): void
+    public function load(ObjectManager $objectManager): void
     {
         $faker = Faker\Factory::create();
 
@@ -26,6 +27,25 @@ class AppFixtures extends Fixture
         $faker->seed('MovieDB');
         // Fournisseur de données, ajouté à Faker
         $faker->addProvider(new MovieDbProvider);
+
+        // 3 users : user, manager, admin
+        $user = new User();
+        $user->setEmail('user@user.com');
+        $user->setPassword('$2y$13$HHc5BGzrOWdNc7GVXCMnIuaWng96Myjw0NUa/YjOhcIEw3N0sZGre');
+        $user->setRoles(['ROLE_USER']);
+        $objectManager->persist($user);
+
+        $manager = new User();
+        $manager->setEmail('manager@manager.com');
+        $manager->setPassword('$2y$13$q3LLzsIgilR2hIVFXKb3iOVzD8RXZg827CaqsEn41zwsUGtaVGNDm');
+        $manager->setRoles(['ROLE_MANAGER']);
+        $objectManager->persist($manager);
+
+        $admin = new User();
+        $admin->setEmail('admin@admin.com');
+        $admin->setPassword('$2y$13$yQqpoAPaC7UMMgQUI.tceeymS4.WUHxniGfybfQw77f/3EGEUv2LO');
+        $admin->setRoles(['ROLE_ADMIN']);
+        $objectManager->persist($admin);
 
         $genres = [];
         $persons = [];
@@ -37,7 +57,7 @@ class AppFixtures extends Fixture
             $genre->setCreatedAt(new DateTimeImmutable());
 
             $genres[] = $genre;
-            $manager->persist($genre);
+            $objectManager->persist($genre);
         }
 
         for ($i = 1; $i <= 20; $i++) {
@@ -47,7 +67,7 @@ class AppFixtures extends Fixture
             $person->setCreatedAt(new DateTimeImmutable());
 
             $persons[] = $person;
-            $manager->persist($person);
+            $objectManager->persist($person);
         }
 
         for ($i = 1; $i <= 20; $i++) {
@@ -65,7 +85,7 @@ class AppFixtures extends Fixture
             }
 
             $movies[] = $movie;
-            $manager->persist($movie);
+            $objectManager->persist($movie);
         }
 
         // for ($i = 1; $i <= 20; $i++) {
@@ -85,11 +105,11 @@ class AppFixtures extends Fixture
                 $casting->setMovie($movie);
                 $casting->setPerson($persons[array_rand($persons)]);
 
-                $manager->persist($casting);
+                $objectManager->persist($casting);
             }
         }
 
 
-        $manager->flush();
+        $objectManager->flush();
     }
 }
