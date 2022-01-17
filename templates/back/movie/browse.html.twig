@@ -5,8 +5,9 @@
 {% block body %}
 <div class="my-5 d-flex justify-content-between align-items-center">
 	<h2>Movie List</h2>
-
+	{% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('back_movie_add') }}" class="btn btn-success" role="button">Add New Movie</a>
+	{% endif %}
 </div>
 
 <table class="table table-hover">
@@ -34,13 +35,18 @@
 						<i class="far fa-eye text-info fa-2x"></i>
 					</a>
 
-						<a href="{{ path('back_movie_edit', {id: movie.id}) }}">
-							<i class="far fa-edit text-warning fa-2x"></i>
-						</i>
+					{% if is_granted('ROLE_ADMIN') %}
+    				<a href="{{ path('back_movie_edit', {id: movie.id}) }}">
+						<i class="far fa-edit text-warning fa-2x"></i>
 					</a>
-					<a href="{{ path('back_movie_delete', {id: movie.id}) }}">
+					{% endif %}
+
+					{% if is_granted('ROLE_ADMIN') %}
+    				<a href="{{ path('back_movie_delete', {id: movie.id}) }}">
 						<i class="far fa-trash-alt text-danger fa-2x"></i>
 					</a>
+					{% endif %}
+					
 		    </td>
         </tr>
         {% endfor %}

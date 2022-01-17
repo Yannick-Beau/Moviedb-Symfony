@@ -51,8 +51,8 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // Soit on accède à la page d'admin par défaut
-        return new RedirectResponse($this->urlGenerator->generate('back_movie_browse'));
+        // Soit on accède à la page d'accueil
+        return new RedirectResponse($this->urlGenerator->generate('home'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

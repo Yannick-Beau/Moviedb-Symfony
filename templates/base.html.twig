@@ -17,10 +17,43 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('home') }}">Accueil</a>
                 </li>
+                {% if is_granted('ROLE_MANAGER') %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('back_movie_browse') }}">Admin</a>
                 </li>
+                {% endif %}
+                {# Connecté #}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                 {# email du user #}
+                <li class="nav-item me-3">
+                    <i>{{ app.user.email }}</i>
+                </li>
+                {# nom du rôle du user #}
+                <li class="nav-item">
+                    <span class="badge bg-primary me-3">
+                        {% if is_granted('ROLE_ADMIN') %}
+                        Administrateur
+                        {% elseif is_granted('ROLE_MANAGER') %}
+                        Manager
+                        {% elseif is_granted('ROLE_USER') %}
+                        Utilisateur
+                        {% endif %}
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-warning" href="{{ path('app_logout') }}">Déconnexion</a>
+                </li>
+                {% else %}
+                {# Non connecté #}
+                <li class="nav-item">
+                    <span class="badge bg-primary me-3">Visiteur</span>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-success" href="{{ path('app_login') }}">Connexion</a>
+                </li>
+                {% endif %}
             </ul>
+
             {% block subnav %}
             {% endblock %}
         </header>
