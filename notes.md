@@ -19,6 +19,7 @@
 - ` php bin/console security:hash-password ` => **Hasher un password**
 - ` php bin/console make:auth ` => **Permet de créer le formulaire d'authentification**
 - `php bin/console make:user` => **Créer une entité  user**
+-  `php bin/console debug:router --show-controlers` => **Permet de voir les routes ainsi que leur controller**
 
 ### DataFixtures
 - ` php bin/console doctrine:fixtures:load ` => **Exécute les data fixtures pour remplir la BDD de données de test**

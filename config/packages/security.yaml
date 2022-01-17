@@ -40,3 +40,10 @@ security:
     access_control:
         - { path: ^/back, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+
+    role_hierarchy:
+        # ROLE_ADMIN hérite de ROLE_MANAGER
+        ROLE_ADMIN: ROLE_MANAGER
+        # Si on souhaite que les MANAGER et ADMIN se comportent comme un USER sur le front
+        ROLE_MANAGER: ROLE_USER
+        # C'est en cascade, donc TOLE_ADMIN => ROLE_USER aussi
