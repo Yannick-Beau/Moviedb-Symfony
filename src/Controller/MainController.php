@@ -8,6 +8,7 @@ use App\Form\ReviewType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\MovieRepository;
 use App\Repository\CastingRepository;
+use App\Repository\GenreRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,12 +20,14 @@ class MainController extends AbstractController
      * Liste les films
      */
     #[Route('/', name: 'home')]
-    public function home(MovieRepository $movieRepository): Response
+    public function home(MovieRepository $movieRepository, GenreRepository $genreRepository): Response
     {
         $movies = $movieRepository->findByOrderedByTitleAsc();
+        $genres = $genreRepository->findBy([], ['name' => 'ASC']);
 
-        return $this->render('main/home.html.twig', [
+        return $this->render('front/main/home.html.twig', [
             'movies' => $movies,
+            'genres' => $genres,
         ]);
     }
     /**
@@ -40,7 +43,7 @@ class MainController extends AbstractController
        $castings = $castingRepository->findAllByMovieJoinedToPerson($movie);
        
 
-        return $this->render('main/movie_show.html.twig', [
+        return $this->render('front/main/movie_show.html.twig', [
             'movie' => $movie,
             'castings' => $castings,
         ]);
@@ -72,7 +75,7 @@ class MainController extends AbstractController
            return $this->redirectToRoute('movie_show', ['id' => $movie->getId()]);
        }
 
-        return $this->render('main/movie_add_review.html.twig', [
+        return $this->render('front/main/movie_add_review.html.twig', [
             'form' => $form->createView(),
             'movie' => $movie,
         ]);
