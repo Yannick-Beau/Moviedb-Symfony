@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use DateTime;
 use Faker;
 use App\Entity\Genre;
 use App\Entity\Movie;
@@ -10,15 +9,20 @@ use App\Entity\Person;
 use DateTimeImmutable;
 use App\Entity\Casting;
 use Doctrine\Persistence\ObjectManager;
-use Doctrine\DBAL\Types\DateImmutableType;
-use SebastianBergmann\Environment\Console;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use App\DataFixtures\provider\MovieDbProvider;
 use App\Entity\User;
-use Symfony\Component\Validator\Constraints\DateTime as ConstraintsDateTime;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
+    private $slugger;
+
+    public function __construct(SluggerInterface $slugger)
+    {
+        $this->slugger = $slugger;
+    }
+
     public function load(ObjectManager $objectManager): void
     {
         $faker = Faker\Factory::create();
@@ -77,6 +81,10 @@ class AppFixtures extends Fixture
             $movie->setDuration($faker->numberBetween(15, 360));
             $movie->setPoster($faker->imageUrl(300, 400));
             $movie->setRating($faker->numberBetween(1, 5));
+
+            // Pour le slug
+            $sluggedTittle = $this->slugger->slug($movie->getTitle());
+            $movie->setSlug($sluggedTittle);
 
             // Association de 1 à 3 genres au hasard
             for($r = 1; $r <= mt_rand(1, 3); $r++) {
