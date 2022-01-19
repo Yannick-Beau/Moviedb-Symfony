@@ -7,6 +7,7 @@ use App\Form\MovieType;
 use App\Repository\MovieRepository;
 use App\Repository\CastingRepository;
 use App\Service\MessageGenerator;
+use App\Service\MySlugger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +49,7 @@ class MovieController extends AbstractController
      * Ajouter un film
      */
     #[Route('/back/movie/add', name: 'back_movie_add', methods: ['GET', 'POST'])]
-    public function add(Request $request, EntityManagerInterface $entityManager, MessageGenerator $messageGenerator): Response
+    public function add(Request $request, EntityManagerInterface $entityManager, MessageGenerator $messageGenerator, MySlugger $mySlugger): Response
     {   
         $movie = new Movie();
         // Créarion du form, associé à l'entité $review
@@ -58,7 +59,8 @@ class MovieController extends AbstractController
        $form->handleRequest($request);
 
        if ($form->isSubmitted() && $form->isValid()) {
-
+           // On défini le slug du film depuis son titre
+           $movie->setSlug($mySlugger->slugify($movie->getTitle()));
            $entityManager->persist($movie);
            $entityManager->flush();
            $this->addFlash('success', $messageGenerator->getSuccessMessage());
@@ -74,7 +76,7 @@ class MovieController extends AbstractController
      * Editer un film
      */
     #[Route('/back/movie/edit/{id<\d+>}', name: 'back_movie_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager, Movie $movie = null, MessageGenerator $messageGenerator): Response
+    public function edit(Request $request, EntityManagerInterface $entityManager, Movie $movie = null, MessageGenerator $messageGenerator, MySlugger $mySlugger): Response
     {   
         // 404
         if ($movie === null) {
@@ -88,6 +90,9 @@ class MovieController extends AbstractController
 
        if ($form->isSubmitted() && $form->isValid()) {
 
+           // On définit le slug du film depuis son titre
+           // /!\ SEO : il faudra prévoir un système de redirection de l'ancienne URL vers la nouvelle URL (avec un status 302)
+           $movie->setSlug($mySlugger->slugify($movie->getTitle()));
            // Pas de persit() pour un edit
            $entityManager->flush();
 

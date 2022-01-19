@@ -10,13 +10,16 @@ use App\Repository\MovieRepository;
 // qui correspond à un dossier "Mapping" de Doctrine
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
-
 /**
  * Classe qui représente la table "movie" et ses enregistrements
  * 
  * @ORM\Entity(repositoryClass=MovieRepository::class)
+ * 
+ * Unicité sur les propriétés $tittle et $slug
+ * @UniqueEntity(fields={"title"})
  */
 class Movie {
     /**
