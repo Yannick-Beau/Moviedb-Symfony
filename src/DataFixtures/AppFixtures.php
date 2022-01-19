@@ -12,15 +12,16 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use App\DataFixtures\provider\MovieDbProvider;
 use App\Entity\User;
+use App\Service\MySlugger;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
-    private $slugger;
+    private $mySlugger;
 
-    public function __construct(SluggerInterface $slugger)
+    public function __construct(MySlugger $mySlugger)
     {
-        $this->slugger = $slugger;
+        $this->mySlugger = $mySlugger;
     }
 
     public function load(ObjectManager $objectManager): void
@@ -83,7 +84,7 @@ class AppFixtures extends Fixture
             $movie->setRating($faker->numberBetween(1, 5));
 
             // Pour le slug
-            $sluggedTittle = $this->slugger->slug($movie->getTitle());
+            $sluggedTittle = $this->mySlugger->slugify($movie->getTitle());
             $movie->setSlug($sluggedTittle);
 
             // Association de 1 à 3 genres au hasard

@@ -11,7 +11,8 @@ parameters:
     # - Dans une autre configuration .yaml du dossier config
     # - Dans notre code source
     app.message_generator_is_random: '%env(bool:MESSAGE_GENERATOR_IS_RANDOM)%'
-    
+    app.slugger_to_lower: '%env(bool:SLUGGER_TO_LOWER)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -37,3 +38,10 @@ services:
         arguments:
             # on fait appel à un paramètre de service
             $isRandom: '%app.message_generator_is_random%'
+
+    # Configuration de notre service MySlugger
+    App\Service\MySlugger:
+        # Arguments à transmettre au constructeur
+        arguments:
+            # on fait appel à un paramètre de service
+            $toLower: '%app.slugger_to_lower%'
