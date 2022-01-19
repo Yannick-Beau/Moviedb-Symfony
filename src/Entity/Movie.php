@@ -33,7 +33,7 @@ class Movie {
     /**
      * Titre du film
      * 
-     * @ORM\Column(type="string", length=211)
+     * @ORM\Column(type="string", length=211, unique=true)
      * 
      * @Assert\NotBlank
      * @Assert\Length(max = 211)
@@ -97,6 +97,11 @@ class Movie {
      * @ORM\OneToMany(targetEntity=Team::class, mappedBy="movie", orphanRemoval=true)
      */
     private $teams;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $slug;
 
 
     public function __construct()
@@ -348,6 +353,18 @@ class Movie {
                 $team->setMovie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
