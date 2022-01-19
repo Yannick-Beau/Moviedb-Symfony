@@ -6,7 +6,7 @@
 	{# Poster du film #}
 
 	<div class="col-4">
-		<a href="{{ path('movie_show', {id: movie.id}) }}">
+		<a href="{{ path('movie_show', {slug: movie.slug}) }}">
 			<img src="{{ movie.poster ?? asset('default-movie.jpg') }}" class="img-fluid">
 		</a>
 	</div>
@@ -18,7 +18,7 @@
 
 		{# Titre #}
 		<p>
-			<a href="{{ path('movie_show', {id: movie.id}) }}" class="title">{{ movie.title }}</a>
+			<a href="{{ path('movie_show', {slug: movie.slug}) }}" class="title">{{ movie.title }}</a>
 		</p>
 
 		{# Genres #}

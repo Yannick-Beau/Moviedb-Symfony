@@ -31,9 +31,9 @@ class MainController extends AbstractController
         ]);
     }
     /**
-     * Affiche un film
+     * Affiche un film selon son slug
      */
-    #[Route('/movie/{id<\d+>}', name: 'movie_show')]
+    #[Route('/movie/{slug}', name: 'movie_show')]
     public function movie(Movie $movie, CastingRepository $castingRepository): Response
     {
        if ($movie === null) {
@@ -52,7 +52,7 @@ class MainController extends AbstractController
     /**
      * Ajout d'une critique sur un film
      */
-    #[Route('/movie/{id<\d+>}/add/review', name: 'movie_add_review', methods: ['GET', 'POST'])]
+    #[Route('/movie/{slug}/add/review', name: 'movie_add_review', methods: ['GET', 'POST'])]
     public function movieAddReview(Movie $movie = null, Request $request, EntityManagerInterface $entityManager): Response
     {
        if ($movie === null) {
