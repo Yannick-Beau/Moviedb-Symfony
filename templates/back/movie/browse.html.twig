@@ -5,6 +5,9 @@
 {% block body %}
 <div class="my-5 d-flex justify-content-between align-items-center">
 	<h2>Movie List</h2>
+
+	{{ include('_flash_messages.html.twig') }}
+
 	{% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('back_movie_add') }}" class="btn btn-success" role="button">Add New Movie</a>
 	{% endif %}

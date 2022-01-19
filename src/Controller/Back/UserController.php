@@ -5,6 +5,7 @@ namespace App\Controller\Back;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\MessageGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/add', name: 'back_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MessageGenerator $messageGenerator): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -38,7 +39,7 @@ class UserController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-
+            $this->addFlash('success', $messageGenerator->getSuccessMessage());
             return $this->redirectToRoute('back_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -57,14 +58,14 @@ class UserController extends AbstractController
     }
 
     #[Route('/edit/{id<\d+>}', name: 'back_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, MessageGenerator $messageGenerator): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
+            $this->addFlash('success', $messageGenerator->getSuccessMessage());
             return $this->redirectToRoute('back_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -75,11 +76,12 @@ class UserController extends AbstractController
     }
 
     #[Route('delete/{id<\d+>}', name: 'back_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, User $user, EntityManagerInterface $entityManager, MessageGenerator $messageGenerator): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
+            $this->addFlash('success', $messageGenerator->getSuccessMessage());
         }
 
         return $this->redirectToRoute('back_user_index', [], Response::HTTP_SEE_OTHER);

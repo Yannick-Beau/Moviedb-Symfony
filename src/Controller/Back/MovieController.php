@@ -6,6 +6,7 @@ use App\Entity\Movie;
 use App\Form\MovieType;
 use App\Repository\MovieRepository;
 use App\Repository\CastingRepository;
+use App\Service\MessageGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +48,7 @@ class MovieController extends AbstractController
      * Ajouter un film
      */
     #[Route('/back/movie/add', name: 'back_movie_add', methods: ['GET', 'POST'])]
-    public function add(Request $request, EntityManagerInterface $entityManager): Response
+    public function add(Request $request, EntityManagerInterface $entityManager, MessageGenerator $messageGenerator): Response
     {   
         $movie = new Movie();
         // Créarion du form, associé à l'entité $review
@@ -60,6 +61,7 @@ class MovieController extends AbstractController
 
            $entityManager->persist($movie);
            $entityManager->flush();
+           $this->addFlash('success', $messageGenerator->getSuccessMessage());
            return $this->redirectToRoute('back_movie_read', ['id' => $movie->getId()]);
        }
 
@@ -72,7 +74,7 @@ class MovieController extends AbstractController
      * Editer un film
      */
     #[Route('/back/movie/edit/{id<\d+>}', name: 'back_movie_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager, Movie $movie = null): Response
+    public function edit(Request $request, EntityManagerInterface $entityManager, Movie $movie = null, MessageGenerator $messageGenerator): Response
     {   
         // 404
         if ($movie === null) {
@@ -88,6 +90,9 @@ class MovieController extends AbstractController
 
            // Pas de persit() pour un edit
            $entityManager->flush();
+
+           $this->addFlash('success', $messageGenerator->getSuccessMessage());
+
            return $this->redirectToRoute('back_movie_read', ['id' => $movie->getId()]);
        }
 
@@ -100,7 +105,7 @@ class MovieController extends AbstractController
      * Supprimer un film
      */
     #[Route('/back/movie/delete/{id<\d+>}', name: 'back_movie_delete', methods: ['GET'])]
-    public function delete(EntityManagerInterface $entityManager, Movie $movie = null): Response
+    public function delete(EntityManagerInterface $entityManager, Movie $movie = null, MessageGenerator $messageGenerator): Response
     {   
         // 404
         if ($movie === null) {
@@ -108,6 +113,9 @@ class MovieController extends AbstractController
         }
        $entityManager->remove($movie);
        $entityManager->flush();
+
+       $this->addFlash('success', $messageGenerator->getSuccessMessage());
+
        return $this->redirectToRoute('back_movie_browse');
        
 

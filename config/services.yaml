@@ -4,7 +4,14 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    # @link https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables
+    # @link https://symfony.com/doc/current/configuration/env_var_processors.html
 
+    # On crée ces paramètres de services que si on a besoin de les réutiliser :
+    # - Dans une autre configuration .yaml du dossier config
+    # - Dans notre code source
+    app.message_generator_is_random: '%env(bool:MESSAGE_GENERATOR_IS_RANDOM)%'
+    
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -23,3 +30,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # Configuration de notre service MessageGenerator
+    App\Service\MessageGenerator:
+        # Arguments à transmettre au constructeur
+        arguments:
+            # on fait appel à un paramètre de service
+            $isRandom: '%app.message_generator_is_random%'
