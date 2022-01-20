@@ -21,6 +21,9 @@
 - `php bin/console make:user` => **Créer une entité  user**
 -  `php bin/console debug:router --show-controlers` => **Permet de voir les routes ainsi que leur controller**
 -  ` php bin/console make:crud ` => **Créer un controller avec toute les methode du BREAD et les template twig**
+-  ` php bin/console make:command` => **Permet de créer une commande ex: app:movie:poster pour récupérer le poster des film depuis une api**
+-  `php bin/console list app` => **Permet de lister la liste des commande de app**
+-  `php bin/console debug:autowiring xxx` => **Permet de chercher un service avec un mot clé**
 
 ### DataFixtures
 - ` php bin/console doctrine:fixtures:load ` => **Exécute les data fixtures pour remplir la BDD de données de test**
