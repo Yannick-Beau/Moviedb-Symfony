@@ -4,14 +4,15 @@ namespace App\Controller\Back;
 
 use App\Entity\User;
 use App\Form\UserType;
-use App\Repository\UserRepository;
+use App\Form\UserEditType;
 use App\Service\MessageGenerator;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/back/user')]
 class UserController extends AbstractController
@@ -58,12 +59,22 @@ class UserController extends AbstractController
     }
 
     #[Route('/edit/{id<\d+>}', name: 'back_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, MessageGenerator $messageGenerator): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, MessageGenerator $messageGenerator, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        // Le form va transmettre les données de la requête
+        // à l'entité, sauf le password qui est non mappé
+        $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Hashage du mot de passe que si on a renseigné le champ mot de passe
+             if (!empty($form->get('password')->getData())) {
+                // C'est là qu'on encode le mot de passe du User (qui se trouve dans $user)
+                $hashedPassword = $passwordHasher->hashPassword($user, $form->get('password')->getData());
+                // On réassigne le mot passe encodé dans le User
+                $user->setPassword($hashedPassword);
+            }
+
             $entityManager->flush();
             $this->addFlash('success', $messageGenerator->getSuccessMessage());
             return $this->redirectToRoute('back_user_index', [], Response::HTTP_SEE_OTHER);

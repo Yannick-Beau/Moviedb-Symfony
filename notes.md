@@ -14,6 +14,7 @@
 - ``` php bin/console doctrine:schema:update --dump-sql ``` => **Vérifier la structure SQL**
 - ``` php bin/console doctrine:schema:validate ``` => **voir si le mapping est corect avec la BDD**
 - ``` php bin/console make:controller ``` => **Créer un controller**
+- `php bin/console make:controller --no-template` => **Créer un controller sans template**
 - ``` php bin/console make:entity ``` => **Créer une entité ou modfier une enitté existente**
 - ` php bin/console make:form ` => **Créer une classe form**
 - ` php bin/console security:hash-password ` => **Hasher un password**
@@ -24,6 +25,7 @@
 -  ` php bin/console make:command` => **Permet de créer une commande ex: app:movie:poster pour récupérer le poster des film depuis une api**
 -  `php bin/console list app` => **Permet de lister la liste des commande de app**
 -  `php bin/console debug:autowiring xxx` => **Permet de chercher un service avec un mot clé**
+-   `php bin/console make:subscriber` => **Créer un subscriber/ écouteur d'événement**
 
 ### DataFixtures
 - ` php bin/console doctrine:fixtures:load ` => **Exécute les data fixtures pour remplir la BDD de données de test**
@@ -70,3 +72,8 @@ Solution :
 
 installation :
 ` composer require fakerphp/faker `
+
+### EasyAdmin 3
+
+**Installation :**
+`composer require easycorp/easyadmin-bundle`
