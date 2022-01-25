@@ -15,8 +15,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Classe qui représente la table "movie" et ses enregistrements
- * 
  * @ORM\Entity(repositoryClass=MovieRepository::class)
+ * 
+ * Cette entité va réagir aux événements "lifecycle callbacks" de Doctrine
+ * https://symfony.com/doc/current/doctrine/events.html#doctrine-lifecycle-callbacks
+ * @ORM\HasLifecycleCallbacks()
  * 
  * Unicité sur les propriétés $tittle et $slug
  * @UniqueEntity(fields={"title"})
@@ -370,6 +373,16 @@ class Movie {
         $this->slug = $slug;
 
         return $this;
+    }
+
+    /**
+     * Exécute cette méthode avant l'update de l'entité en BDD
+     * /!\ Géré en interne par Doctrine
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAtValueToNow()
+    {
+        $this->updatedAt = new DateTime();
     }
 
     
