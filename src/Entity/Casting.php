@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\CastingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CastingRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CastingRepository::class)
@@ -14,16 +15,22 @@ class Casting
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * 
+     * @Groups("movies_get")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=30)
+     * 
+     * @Groups("movies_get")
      */
     private $role;
 
     /**
      * @ORM\Column(type="smallint")
+     * 
+     * @Groups("movies_get")
      */
     private $creditOrder;
 
@@ -36,6 +43,8 @@ class Casting
     /**
      * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="castings")
      * @ORM\JoinColumn(nullable=true)
+     * 
+     * @Groups("movies_get")
      */
     private $person;
 

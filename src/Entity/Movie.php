@@ -5,14 +5,13 @@ namespace App\Entity;
 use DateTime;
 use App\Entity\Review;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\MovieRepository;
 // On va appliquer la logique de mapping via l'annotation @ORM
 // qui correspond à un dossier "Mapping" de Doctrine
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Classe qui représente la table "movie" et ses enregistrements
  * @ORM\Entity(repositoryClass=MovieRepository::class)
@@ -33,6 +32,7 @@ class Movie {
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("movies_get")
      */
     private $id;
 
@@ -43,6 +43,7 @@ class Movie {
      * 
      * @Assert\NotBlank
      * @Assert\Length(max = 211)
+     * @Groups("movies_get")
      */
     private $title;
 
@@ -58,8 +59,9 @@ class Movie {
 
     /**
      * @ORM\Column(type="date", nullable=false)
-     * 
      * @Assert\NotBlank
+     * 
+     * @Groups("movies_get")
      */
     private $releaseDate;
 
@@ -69,6 +71,8 @@ class Movie {
      * @Assert\NotBlank
      * @Assert\Positive
      * @Assert\LessThanOrEqual(1440)
+     * 
+     * @Groups("movies_get")
      */
     private $duration;
 
@@ -76,11 +80,15 @@ class Movie {
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="movies")
      * 
      * @Assert\Count(min=1)
+     * 
+     * @Groups("movies_get")
      */
     private $genres;
 
     /**
      * @ORM\OneToMany(targetEntity=Casting::class, mappedBy="movie", orphanRemoval=true)
+     * 
+     * @Groups("movies_get")
      */
     private $castings;
 
@@ -91,11 +99,15 @@ class Movie {
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * 
+     * @Groups("movies_get")
      */
     private $poster;
 
     /**
      * @ORM\Column(type="smallint", nullable=true)
+     * 
+     * @Groups("movies_get")
      */
     private $rating;
 
@@ -106,6 +118,8 @@ class Movie {
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * 
+     * @Groups("movies_get")
      */
     private $slug;
 

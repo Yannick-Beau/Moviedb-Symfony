@@ -77,3 +77,4 @@ installation :
 
 **Installation :**
 `composer require easycorp/easyadmin-bundle`
+
