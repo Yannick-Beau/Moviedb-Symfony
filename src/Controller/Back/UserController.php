@@ -4,7 +4,6 @@ namespace App\Controller\Back;
 
 use App\Entity\User;
 use App\Form\UserType;
-use App\Form\UserEditType;
 use App\Service\MessageGenerator;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -63,7 +62,7 @@ class UserController extends AbstractController
     {
         // Le form va transmettre les données de la requête
         // à l'entité, sauf le password qui est non mappé
-        $form = $this->createForm(UserEditType::class, $user);
+        $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
