@@ -7,6 +7,7 @@ use App\Entity\Review;
 use Doctrine\ORM\Mapping as ORM;
 // On va appliquer la logique de mapping via l'annotation @ORM
 // qui correspond à un dossier "Mapping" de Doctrine
+use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
