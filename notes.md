@@ -56,6 +56,11 @@ Public function __toString() {
 
 **fetch="EAGER"** => pour récupérer systématiquement l'objet de la relation
 
+### JWT
+Installation :
+- ``` composer require "lexik/jwt-authentication-bundle"  ``` 
+Génération des clés:
+- `php bin/console lexik:jwt:generate-keypair`
 ### Si une classe de Repository est manquante
 
 On serait bloqués pour :

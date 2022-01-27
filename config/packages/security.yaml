@@ -17,6 +17,22 @@ security:
                 property: email
 
     firewalls:
+        # Règles pour le login de LexikJWT
+        login:
+            pattern: ^/api/login
+            stateless: true
+            json_login:
+                # URL de login
+                check_path: /api/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        # Règles où le JWT doit s'appliquer
+        api:
+            pattern:   ^/api
+            stateless: true
+            jwt: ~
+
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
@@ -38,6 +54,13 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        ### ==========
+        ### Routes API
+        ### ==========
+        - { path: ^api/movies, roles: ROLE_ADMIN, methods: [POST, PUT, PATCH, DELETE]}
+        ### ======================
+        ### Routes Application Web
+        ### ======================
         # Front : Si user ANONYME : page d'accueil + fiche film seulement => rien à configurer, c'est l'accès par défaut
 
         # Front : Si ROLE_USER : ajouter une critique sur un film.
