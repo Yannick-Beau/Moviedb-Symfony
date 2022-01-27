@@ -149,3 +149,17 @@ $movie = $movieRepository->find(1);
 $manager->remove($movie);
 $manager->flush();
 ```
+
+# Test
+Installation :
+- `composer require --dev phpunit/phpunit symfony/test-pack`
+
+Création du fichier .env.test.local avec la database de test puis on exécute les commande pour créer la DB:
+- `php bin/console --env=test doctrine:database:create`
+- ensuite on applique les migrations => `php bin/console --env=test doctrine:migrations:migrate`
+-  puis on relance les datafeaxture => `php bin/console --env=test doctrine:fixtures:load`
+
+Exécuter les test :
+- `php bin/phpunit`
+Créer un test :
+- `php bin/console make:test`
