@@ -121,4 +121,20 @@ class MovieController extends AbstractController
         return new JsonResponse(["message" => "Film modifié"], Response::HTTP_OK);
     }
 
+    #[Route('/api/movies/{id<\d+>}', name: 'api_movies_delete_item', methods:'DELETE')]
+    public function deleteItem(Movie $movie = null, EntityManagerInterface $em)
+    {
+        if (null === $movie) {
+
+            $error = 'Ce film n\'existe pas';
+
+            return $this->json(['error' => $error], Response::HTTP_NOT_FOUND);
+        }
+
+        $em->remove($movie);
+        $em->flush();
+
+        return $this->json(['message' => 'Le film a bien été supprimé.'], Response::HTTP_OK);
+    }
+
 }
