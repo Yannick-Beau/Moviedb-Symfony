@@ -74,9 +74,7 @@ class MovieController extends AbstractController
         );
     }
 
-     /**
-     * @Route("/api/movies/{id<\d+>}", name="api_movies_put_item", methods={"PUT", "PATCH"})
-     */
+    #[Route('/api/movies/{id<\d+>}', name: 'api_movies_put_item', methods:['PUT', 'PATH'])]
     public function putItem(Movie $movie = null, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
         // Film non trouvé
