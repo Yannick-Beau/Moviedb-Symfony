@@ -8,8 +8,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MovieController extends AbstractController
@@ -27,7 +29,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/api/movies/{id<\d+>}', name: 'api_movies_get_item', methods:'GET')]
-    public function show(Movie $movie): Response
+    public function getItem(Movie $movie): Response
     {
         // /!\ JSON Hijacking
         // @see https://symfony.com/doc/current/components/http_foundation.html#creating-a-json-response
@@ -71,4 +73,54 @@ class MovieController extends AbstractController
             ['groups' => 'movies_get']
         );
     }
+
+     /**
+     * @Route("/api/movies/{id<\d+>}", name="api_movies_put_item", methods={"PUT", "PATCH"})
+     */
+    public function putItem(Movie $movie = null, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        // Film non trouvé
+        if ($movie === null) {
+            return new JsonResponse(
+                ["message" => "Film non trouvé"],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+        // Récupère les données de la requête
+        $data = $request->getContent();
+
+        // @todo Pour PUT, s'assurer qu'on ait un certain nombre de champs
+        // @todo Pour PATCH, s'assurer qu'on au moins un champ
+        // sinon => 422 HTTP_UNPROCESSABLE_ENTITY
+
+        // On désérialise le JSON vers *l'entité Movie existante*
+        // @see https://symfony.com/doc/current/components/serializer.html#deserializing-in-an-existing-object
+        $movie = $serializer->deserialize($data, Movie::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $movie]);
+
+        // On valide l'entité
+        $errors = $validator->validate($movie);
+
+        // Affichage des erreurs
+        if (count($errors) > 0) {
+            // On va créer un joli tableau d'erreurs
+            $newErrors = [];
+            // Pour chaque erreur
+            foreach ($errors as $error) {
+                // Astuce ici ! on poush dans un taleau
+                // = similaire à la structure des Flash Messages
+                // On push le message, à la clé qui contient la propriété
+                $newErrors[$error->getPropertyPath()][] = $error->getMessage();
+            }
+
+            return new JsonResponse(["errors" => $newErrors], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // Enregistrement en BDD
+        $entityManager->flush();
+
+        // @todo Conditionner le message de retour au cas où
+        // l'entité ne serait pas modifiée
+        return new JsonResponse(["message" => "Film modifié"], Response::HTTP_OK);
+    }
+
 }
