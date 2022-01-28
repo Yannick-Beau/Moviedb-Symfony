@@ -85,7 +85,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('delete/{id<\d+>}', name: 'back_user_delete', methods: ['POST'])]
+    #[Route('/delete/{id<\d+>}', name: 'back_user_delete', methods: ['GET'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager, MessageGenerator $messageGenerator): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {

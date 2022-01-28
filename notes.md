@@ -160,6 +160,6 @@ Création du fichier .env.test.local avec la database de test puis on exécute l
 -  puis on relance les datafeaxture => `php bin/console --env=test doctrine:fixtures:load`
 
 Exécuter les test :
-- `php bin/phpunit`
+- `php bin/phpunit --testdox`
 Créer un test :
 - `php bin/console make:test`

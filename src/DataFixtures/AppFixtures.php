@@ -3,29 +3,59 @@
 namespace App\DataFixtures;
 
 use Faker;
+use App\Entity\User;
 use App\Entity\Genre;
 use App\Entity\Movie;
 use App\Entity\Person;
 use DateTimeImmutable;
 use App\Entity\Casting;
+use App\Service\MySlugger;
+use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use App\DataFixtures\provider\MovieDbProvider;
-use App\Entity\User;
-use App\Service\MySlugger;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
     private $mySlugger;
 
-    public function __construct(MySlugger $mySlugger)
+    // La connexion directe (DBAL)
+    private $connection;
+
+    public function __construct(MySlugger $mySlugger, Connection $connection)
     {
         $this->mySlugger = $mySlugger;
+        $this->connection = $connection;
+    }
+
+    /**
+     * Permet de TRUNCATE les tables et de remettre les AI à 1
+     */
+    private function truncate()
+    {
+        
+        // On passe en mode SQL ! On cause avec MySQL
+        // Désactivation des contraintes FK
+        $this->connection->executeQuery('SET foreign_key_checks = 0');
+        // On tronque
+        $this->connection->executeQuery('TRUNCATE TABLE casting');
+        $this->connection->executeQuery('TRUNCATE TABLE departement');
+        $this->connection->executeQuery('TRUNCATE TABLE genre');
+        $this->connection->executeQuery('TRUNCATE TABLE job');
+        $this->connection->executeQuery('TRUNCATE TABLE movie');
+        $this->connection->executeQuery('TRUNCATE TABLE movie_genre');
+        $this->connection->executeQuery('TRUNCATE TABLE person');
+        $this->connection->executeQuery('TRUNCATE TABLE review');
+        $this->connection->executeQuery('TRUNCATE TABLE team');
+        $this->connection->executeQuery('TRUNCATE TABLE user');
+        // etc.
     }
 
     public function load(ObjectManager $objectManager): void
     {
+        // On va truncate nos tables à la main pour revenir à id=1
+        $this->truncate();
+
         $faker = Faker\Factory::create();
 
         // Si on veut toujours les mêmes données
